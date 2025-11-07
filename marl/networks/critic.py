@@ -127,6 +127,3 @@ class CentralizedCritic(nn.Module):
             values = torch.cat([head(features) for head in self.value_heads], dim=-1)
             return values
 
-
-from typing import Optional
-

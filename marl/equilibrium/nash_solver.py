@@ -126,7 +126,7 @@ class NashEquilibriumSolver:
         return [np.ones(n) / n for n in n_actions]
     
     def guide_policy(self, q_values: torch.Tensor, equilibrium_strategy: np.ndarray,
-                    temperature: float = 1.0) -> torch.Tensor:
+                    temperature: float = 1.0, alpha: float = 0.5) -> torch.Tensor:
         """
         Guide policy towards equilibrium strategy while maintaining exploration.
         
@@ -134,6 +134,7 @@ class NashEquilibriumSolver:
             q_values: Q-values for each action (shape: [batch_size, n_actions])
             equilibrium_strategy: Nash equilibrium mixed strategy
             temperature: Temperature parameter for soft guidance
+            alpha: Balance between Q-learning and equilibrium (0-1)
         
         Returns:
             Guided action probabilities
@@ -145,7 +146,6 @@ class NashEquilibriumSolver:
         q_probs = torch.softmax(q_values / temperature, dim=-1)
         
         # Blend Q-value policy with equilibrium strategy
-        alpha = 0.5  # Balance between Q-learning and equilibrium
         guided_probs = alpha * q_probs + (1 - alpha) * eq_strategy.unsqueeze(0)
         
         return guided_probs

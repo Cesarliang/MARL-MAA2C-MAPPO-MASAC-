@@ -45,6 +45,9 @@ class ReplayBuffer:
         Returns:
             Batch of (states, actions, rewards, next_states, dones)
         """
+        if batch_size > len(self.buffer):
+            batch_size = len(self.buffer)
+        
         indices = np.random.choice(len(self.buffer), batch_size, replace=False)
         states, actions, rewards, next_states, dones = zip(*[self.buffer[i] for i in indices])
         
@@ -112,6 +115,9 @@ class MultiAgentReplayBuffer:
         Returns:
             Dictionary of batched experiences
         """
+        if batch_size > len(self.buffer):
+            batch_size = len(self.buffer)
+        
         indices = np.random.choice(len(self.buffer), batch_size, replace=False)
         batch = [self.buffer[i] for i in indices]
         

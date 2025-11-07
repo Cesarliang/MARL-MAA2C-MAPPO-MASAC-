@@ -2,9 +2,6 @@
 Quick test script to verify the implementation works
 """
 
-import sys
-sys.path.insert(0, '.')
-
 import numpy as np
 import torch
 from marl.algorithms.maa2c import MAA2C
@@ -83,6 +80,7 @@ def test_basic_functionality():
     return True
 
 if __name__ == '__main__':
+    import sys
     try:
         test_basic_functionality()
     except Exception as e:

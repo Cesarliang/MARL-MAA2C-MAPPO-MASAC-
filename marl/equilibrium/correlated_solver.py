@@ -159,7 +159,8 @@ class CorrelatedEquilibriumSolver:
     def guide_policy(self, q_values: torch.Tensor, 
                     equilibrium_distribution: np.ndarray,
                     agent_id: int,
-                    temperature: float = 1.0) -> torch.Tensor:
+                    temperature: float = 1.0,
+                    alpha: float = 0.6) -> torch.Tensor:
         """
         Guide policy towards correlated equilibrium strategy.
         
@@ -168,6 +169,7 @@ class CorrelatedEquilibriumSolver:
             equilibrium_distribution: Joint probability distribution
             agent_id: Agent index
             temperature: Temperature parameter for soft guidance
+            alpha: Weight for Q-learning (0-1)
         
         Returns:
             Guided action probabilities
@@ -185,7 +187,6 @@ class CorrelatedEquilibriumSolver:
         q_probs = torch.softmax(q_values / temperature, dim=-1)
         
         # Blend Q-value policy with equilibrium strategy
-        alpha = 0.6  # Weight for Q-learning
         guided_probs = alpha * q_probs + (1 - alpha) * eq_strategy.unsqueeze(0)
         
         return guided_probs
